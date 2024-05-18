@@ -1550,7 +1550,7 @@ elif [[ -n "${Default_theme}" ]]; then
   fi
 fi
 
-if [[ "${TARGET_PROFILE}" == "Armvirt_64" ]]; then
+if [[ "${TARGET_PROFILE}" == "Armvirt_64" ]] || [[ "${TARGET_PROFILE}" == "Amlogic_mesongx" ]]; then
   echo "AMLOGIC_CODE=AMLOGIC" >> ${GITHUB_ENV}
   export PACKAGING_FIRMWARE="${UPDATE_FIRMWARE_ONLINE}"
   echo "PACKAGING_FIRMWARE=${UPDATE_FIRMWARE_ONLINE}" >> ${GITHUB_ENV}
@@ -1790,10 +1790,10 @@ git push --force "https://${REPO_TOKEN}@github.com/${GIT_REPOSITORY}" HEAD:main
 }
 
 function firmware_jiance() {
-if [[ "${TARGET_PROFILE}" == "Armvirt_64" ]] && [[ `ls -1 "${FIRMWARE_PATH}" |grep -c ".*.tar.gz"` -eq '1' ]] && [[ "${PACKAGING_FIRMWARE}" == "true" ]]; then
+if [[ "${TARGET_PROFILE}" == "Armvirt_64" ]] || [[ "${TARGET_PROFILE}" == "Amlogic_mesongx" ]] && [[ `ls -1 "${FIRMWARE_PATH}" |grep -c ".*.tar.gz"` -eq '1' ]] && [[ "${PACKAGING_FIRMWARE}" == "true" ]]; then
   mkdir -p "${HOME_PATH}/targz"
   cp -rf ${FIRMWARE_PATH}/*.tar.gz ${HOME_PATH}/targz/${SOURCE}-armvirt-64-default-rootfs.tar.gz
-elif [[ "${TARGET_PROFILE}" == "Armvirt_64" ]] && [[ `ls -1 "${FIRMWARE_PATH}" |grep -c ".*.tar.gz"` -eq '0' ]] && [[ "${PACKAGING_FIRMWARE}" == "true" ]]; then
+elif [[ "${TARGET_PROFILE}" == "Armvirt_64" ]] || [[ "${TARGET_PROFILE}" == "Amlogic_mesongx" ]] && [[ `ls -1 "${FIRMWARE_PATH}" |grep -c ".*.tar.gz"` -eq '0' ]] && [[ "${PACKAGING_FIRMWARE}" == "true" ]]; then
   echo "PACKAGING_FIRMWARE=false" >> ${GITHUB_ENV}
   TIME r "没发现armvirt-64-default-rootfs.tar.gz包存在，关闭自动打包操作"
 fi
