@@ -73,7 +73,7 @@ do
 	[[ -f "$b" ]] && mv "$b" "${lmo_new_file}" 2>"/dev/null"
 done
 
-if [[ -n "$(grep "downloads.openwrt.org" /etc/opkg/distfeeds.conf)" ]]; then
-	sed -i 's?downloads.openwrt.org?mirrors.cloud.tencent.com/openwrt?g' /etc/opkg/distfeeds.conf
-fi
+# if [[ -n "$(grep "downloads.openwrt.org" /etc/opkg/distfeeds.conf)" ]]; then
+# 	sed -i 's?downloads.openwrt.org?mirrors.cloud.tencent.com/openwrt?g' /etc/opkg/distfeeds.conf
+# fi
 
