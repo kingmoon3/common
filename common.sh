@@ -583,6 +583,8 @@ if [[ -d "${HOME_PATH}/target/linux/armsr" ]]; then
   features_file="${HOME_PATH}/target/linux/armsr/Makefile"
 elif [[ -d "${HOME_PATH}/target/linux/armvirt" ]]; then
   features_file="${HOME_PATH}/target/linux/armvirt/Makefile"
+elif [[ -d "${HOME_PATH}/target/linux/amlogic" ]]; then
+  features_file="${HOME_PATH}/target/linux/amlogic/Makefile"
 fi
 [[ -n "${features_file}" ]] && sed -i "s?FEATURES+=.*?FEATURES+=targz?g" "${features_file}"
 sed -i '/DISTRIB_SOURCECODE/d' "${REPAIR_PATH}"
@@ -1388,7 +1390,7 @@ if [[ `grep -c "CONFIG_PACKAGE_luci-app-unblockneteasemusic=y" ${HOME_PATH}/.con
   fi
 fi
 
-if [[ `grep -c "CONFIG_TARGET_armvirt=y" ${HOME_PATH}/.config` -eq '1' ]] || [[ `grep -c "CONFIG_TARGET_armsr=y" ${HOME_PATH}/.config` -eq '1' ]]; then
+if [[ `grep -c "CONFIG_TARGET_armvirt=y" ${HOME_PATH}/.config` -eq '1' ]] || [[ `grep -c "CONFIG_TARGET_armsr=y" ${HOME_PATH}/.config` -eq '1' ]] || [[ `grep -c "CONFIG_TARGET_amlogic=y" ${HOME_PATH}/.config` -eq '1' ]]; then
   echo -e "\nCONFIG_TARGET_ROOTFS_TARGZ=y" >> "${HOME_PATH}/.config"
   sed -i 's/CONFIG_PACKAGE_luci-app-autoupdate=y/# CONFIG_PACKAGE_luci-app-autoupdate is not set/g' ${HOME_PATH}/.config
 fi
@@ -1485,6 +1487,8 @@ elif [[ -n "$(grep -Eo 'CONFIG_TARGET.*armsr.*armv8.*=y' ${HOME_PATH}/.config)" 
   export TARGET_PROFILE="Armvirt_64"
 elif [[ -n "$(grep -Eo 'CONFIG_TARGET.*armvirt.*64.*=y' ${HOME_PATH}/.config)" ]]; then
   export TARGET_PROFILE="Armvirt_64"
+elif [[ -n "$(grep -Eo 'CONFIG_TARGET.*amlogic.*mesongx.*=y' ${HOME_PATH}/.config)" ]]; then
+  export TARGET_PROFILE="Amlogic_mesongx"
 elif [[ -n "$(grep -Eo 'CONFIG_TARGET.*DEVICE.*=y' ${HOME_PATH}/.config)" ]]; then
   export TARGET_PROFILE="$(grep -Eo "CONFIG_TARGET.*DEVICE.*=y" ${HOME_PATH}/.config | sed -r 's/.*DEVICE_(.*)=y/\1/')"
 else
@@ -1556,7 +1560,7 @@ if [[ "${TARGET_PROFILE}" == "Armvirt_64" ]]; then
     [[ -d "$X" ]] && \
     sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' "$X/Makefile"; \
   done
-elif [[ "${TARGET_BOARD}" =~ (armvirt|armsr) ]]; then
+elif [[ "${TARGET_BOARD}" =~ (armvirt|armsr|amlogic) ]]; then
   echo "PACKAGING_FIRMWARE=false" >> ${GITHUB_ENV}
   echo "UPDATE_FIRMWARE_ONLINE=false" >> ${GITHUB_ENV}
 else
@@ -1976,6 +1980,8 @@ elif [[ -n "$(grep -Eo 'CONFIG_TARGET.*armsr.*armv8.*=y' build/${FOLDER_NAME}/${
   export TARGET_PROFILE="Armvirt_64"
 elif [[ -n "$(grep -Eo 'CONFIG_TARGET.*armvirt.*64.*=y' build/${FOLDER_NAME}/${CONFIG_FILE})" ]]; then
   export TARGET_PROFILE="Armvirt_64"
+elif [[ -n "$(grep -Eo 'CONFIG_TARGET.*amlogic.*mesongx.*=y' build/${FOLDER_NAME}/${CONFIG_FILE})" ]]; then
+  export TARGET_PROFILE="Amlogic_mesongx"
 elif [[ -n "$(grep -Eo 'CONFIG_TARGET.*DEVICE.*=y' build/${FOLDER_NAME}/${CONFIG_FILE})" ]]; then
   export TARGET_PROFILE="$(grep -Eo "CONFIG_TARGET.*DEVICE.*=y" build/${FOLDER_NAME}/${CONFIG_FILE} | sed -r 's/.*DEVICE_(.*)=y/\1/')"
 else
